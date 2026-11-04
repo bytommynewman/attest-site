@@ -1,22 +1,22 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Attest · Approved should stay approved</title><meta name="description" content="Document control for Confluence Cloud. Approvals that lock, signatures inside the page, and an audit trail you can export."><meta name="theme-color" content="#04060d"><link rel="icon" href="logo.png"><link rel="stylesheet" href="style.css?v=3"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Attest · Confluence approvals that reset when the page changes</title><meta name="description" content="Controlled-document approvals for Confluence Cloud. Approved pages lock, signatures appear in the page, and a new version resets the approval."><meta name="theme-color" content="#04060d"><link rel="icon" href="logo.png"><script>document.documentElement.classList.add("js")</script><link rel="preload" href="media/fonts/inter.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="style.css?v=5"></head>
 <body><canvas id="field" aria-hidden="true"></canvas>
 <header class="nav"><div class="wrap"><a class="brand" href="./"><img src="logo.png" alt="" width="32" height="32"><span>Attest</span></a><nav class="links" aria-label="Site"><a href="./" aria-current=page>Product</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav></div></header>
 <main><div id="bar" aria-hidden="true"></div><div class="wrap">
 <div class="hero">
  <div>
-  <div class="eyebrow rv"><i></i>Document control for Confluence Cloud</div>
-  <h1 class="big rv" style="--d:.06s">Approved should stay approved.</h1>
-  <p class="lead rv" style="--d:.12s">On an ordinary wiki page, someone can edit an approved document and it goes on looking approved. Attest catches that the moment it's published: the approval resets, the signatures clear, the owner is told, and the record shows exactly what happened.</p>
+  <div class="eyebrow rv"><i></i>Controlled-document approvals for Confluence Cloud</div>
+  <h1 class="big rv" style="--d:.06s">Confluence approvals that reset when the page changes.</h1>
+  <p class="lead rv" style="--d:.12s">On an ordinary Confluence page, an approved document can be edited and still look approved. With Attest, an approved page locks. If someone with access publishes a new version, the approval resets to Draft, the signatures clear, a page comment notifies the owner, and the audit trail records it.</p>
   <div class="cta rv" style="--d:.18s"><a class="btn gold" href="mailto:tommy_newman@icloud.com?subject=Attest%20early%20access">Get early access</a><a class="btn" href="#proof">See the real app</a></div>
-  <p class="note-small rv" style="--d:.24s">Marketplace listing in preparation. Early access is by email, directly with the person who built it.</p>
+  <p class="note-small rv" style="--d:.24s">Not on the Marketplace yet. Early access is by email, directly with the person who built it.</p>
  </div>
  <div class="stage rv" style="--d:.1s">
-  <div class="doc" id="doc" data-state="draft" data-edited="false" aria-label="Interactive illustration of a document moving through approval">
+  <div class="doc" id="doc" data-state="draft" data-edited="false" role="group" aria-label="Interactive illustration of a document moving through approval">
    <div class="doc-top"><span class="ver">Version 3</span><span class="chip">Draft</span></div>
    <div class="sheet"><h3>Quality Manual</h3><div class="line"></div><div class="line m"></div><div class="line new"></div><div class="line s"></div><div class="sig"></div><img class="seal" src="media/seal.webp" alt="" width="92" height="92"></div>
    <div class="lock"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg><span></span></div>
-   <div class="verdict" aria-live="polite"></div>
+   <div class="verdict"></div>
    <div class="trail" aria-hidden="true"></div>
    <button class="btn next" type="button"></button>
   </div>
@@ -25,27 +25,27 @@
 </div>
 <div class="facts rv">
  <div><b>0</b><span>servers of our own. It runs on Atlassian Forge and makes no outside network calls.</span></div>
- <div><b>0</b><span>ways to edit or delete an audit entry from inside the app.</span></div>
- <div><b>1</b><span>setup per space, covering every page, including ones created later.</span></div>
+ <div><b>0</b><span>ways to edit or delete an audit entry from inside the app. Entries aren't cryptographically sealed.</span></div>
+ <div><b>2</b><span>people by default: whoever submits a document can't also approve it.</span></div>
  <div><b>UTC</b><span>on every signature and audit entry, so a timestamp means one thing.</span></div>
 </div>
 </div>
 <section><div class="wrap">
- <h2 class="rv">The gap an auditor finds first.</h2>
- <p class="sub rv" style="--d:.05s">A status label is only worth something if it changes when the document does.</p>
+ <h2 class="rv">What a status label doesn't do.</h2>
+ <p class="sub rv" style="--d:.05s">A status label doesn't change on its own when a new version is published.</p>
  <div class="problem">
-  <div class="card bad rv"><span class="tag">A label on a page</span><ul><li>Someone edits the page after sign-off, and it can keep looking approved</li><li>Who approved which version lives in someone's memory or inbox</li><li>Review dates pass without anyone noticing</li><li>Every space needs setting up separately</li></ul></div>
-  <div class="card good rv" style="--d:.08s"><span class="tag">Attest</span><ul><li>Publishing a new version resets the approval automatically</li><li>Approver, role, UTC time and version are rendered in the page itself</li><li>A daily check expires overdue documents and posts on the page</li><li>Configure once per space, and it applies to every page</li></ul></div>
+  <div class="card bad rv"><span class="tag">A label on a page</span><ul><li>Someone edits the page after sign-off, and it can keep looking approved</li><li>Who approved which version lives in someone's memory or inbox</li><li>Review dates pass without anyone noticing</li><li>Anyone who can edit the page can change the label</li></ul></div>
+  <div class="card good rv" style="--d:.08s"><span class="tag">Attest</span><ul><li>Publishing a new version resets the approval automatically</li><li>Approver, role, UTC time and version are rendered in the page itself</li><li>A daily check expires overdue documents and posts on the page</li><li>Only listed approvers can approve, and only space admins can list them</li></ul></div>
  </div>
 </div></section>
 <section id="proof"><div class="wrap">
- <h2 class="rv">No mockups. This is the app.</h2>
+ <h2 class="rv">Screens from the app.</h2>
  <p class="sub rv" style="--d:.05s">Real screens from Attest running in Confluence Cloud on a test site.</p>
  <div class="proof rv">
   <div class="tabs" role="tablist" aria-label="Product screens">
    <button role="tab" type="button" aria-selected="true" data-cap="The signature record sits in the page body: approver, role, UTC time and version.">Signature in the page</button>
    <button role="tab" type="button" aria-selected="false" data-cap="The panel under the title shows state, signatures, the review date and the next action.">Approval panel</button>
-   <button role="tab" type="button" aria-selected="false" data-cap="Every state change is on the record: when, who, what changed and at which version.">Audit trail</button>
+   <button role="tab" type="button" aria-selected="false" data-cap="Every state change is on the record: when, who, which state change and at which version.">Audit trail</button>
   </div>
   <div class="shots"><img class="on" src="media/proof-signature.webp" alt="Confluence page showing an approval record table with approver, role, signed time and version" width="1456" height="816"><img src="media/proof-panel.webp" alt="Attest panel showing an approved document with its signature and review date" width="1456" height="816" loading="lazy"><img src="media/proof-audit.webp" alt="Attest panel showing the audit trail for a document" width="1456" height="816" loading="lazy"></div>
   <p class="caption" aria-live="polite">The signature record sits in the page body: approver, role, UTC time and version.</p>
@@ -53,32 +53,38 @@
 </div></section>
 <section id="film"><div class="wrap">
  <h2 class="rv">See it in thirty seconds.</h2>
- <div class="film rv"><video src="media/promo.mp4" poster="media/promo-poster.jpg" controls playsinline preload="none" aria-label="Attest product film, no audio"></video></div>
+ <div class="film rv"><video width="1600" height="900" src="media/promo.mp4" poster="media/promo-poster.jpg" controls playsinline preload="none" aria-label="Attest product film, no audio"></video></div>
 </div></section>
 <section id="start"><div class="wrap">
- <h2 class="rv">Set it up once. Then it runs.</h2>
+ <h2 class="rv">How it works.</h2>
  <ol class="flow">
   <li class="rv"><strong>Set it up.</strong> Space settings, Integrations, Document control. Add approvers with their roles, choose how many must sign, set a review period.</li>
   <li class="rv"><strong>Submit and approve.</strong> Open Document control under any page title and submit it for review. An approver signs.</li>
   <li class="rv"><strong>Place the signature.</strong> Insert the Approval signatures macro where the record belongs in the document.</li>
-  <li class="rv"><strong>Let it run.</strong> Edits reset the approval and tell the owner. A daily check handles review dates.</li>
+  <li class="rv"><strong>After approval.</strong> Publishing a new version resets the approval and posts a page comment for the owner. A daily check expires documents past their review date.</li>
  </ol>
+</div></section>
+<section id="who"><div class="wrap">
+ <h2 class="rv">Who can do what.</h2>
+ <p class="sub rv" style="--d:.05s">The panel and the server use the same rules, so a crafted request gets the same answer as the button.</p>
+ <div class="tablewrap who rv"><table><tr><th>Action</th><th>Allowed for</th></tr><tr><td>Submit for review</td><td>Anyone who can view the page</td></tr><tr><td>Approve</td><td>Listed approvers who haven't already signed and didn't submit this version. A space can allow self-approval.</td></tr><tr><td>Send back to draft</td><td>Listed approvers</td></tr><tr><td>Reset an approval</td><td>Listed approvers and the page owner</td></tr><tr><td>Expire a document</td><td>Only the daily check</td></tr><tr><td>Change settings or export the space's trail</td><td>Space administrators</td></tr></table></div>
 </div></section>
 <section><div class="wrap">
  <h2 class="rv">Questions a careful buyer asks.</h2>
  <div class="faq rv">
   <details><summary>Does our data leave Atlassian?</summary><p>Attest has no servers of its own and makes no outside network calls. What it stores is held in Forge storage on Atlassian's infrastructure. The <a href="privacy.html">privacy policy</a> lists every field.</p></details>
   <details><summary>Who loses edit access when a page locks?</summary><p>While a page is approved, only its approvers, its owner, anyone already named in its restrictions and the app can edit it. Everyone else in the space loses edit access until the approval is reset, when the previous restrictions are restored. Locking can be turned off per space.</p></details>
-  <details><summary>What if a lock can't be applied?</summary><p>Attest says so in the panel and records it in the audit trail. It doesn't fail silently.</p></details>
-  <details><summary>Who can change the approvers?</summary><p>Only space administrators. Settings changes check the caller's actual permission on that space.</p></details>
-  <details><summary>Does it read our page content?</summary><p>No. It works with page versions and restrictions and never requests the page body. To be upfront: one permission it needs to set restrictions is broad enough to allow reading content, but the app doesn't use it that way.</p></details>
-  <details><summary>Will this make us 21 CFR Part 11 compliant or ISO 13485 certified?</summary><p>No, and no software can. Attest gives you approval records with the detail an auditor expects. Validating your process remains your responsibility.</p></details>
-  <details><summary>What permissions does it ask for?</summary><p>Storage for its own records; page versions and the page-updated event; the caller's space permissions; edit restrictions; comments for its notices; and its own account id so it can include itself in restrictions it writes.</p></details>
+  <details><summary>What if a lock can't be applied?</summary><p>The approval stands, but the page stays editable. The panel shows an error, and the audit trail records it.</p></details>
+  <details><summary>Who can change the approvers?</summary><p>Only space administrators, checked against the caller's permissions on that space. Every settings change is recorded in the space's audit trail.</p></details>
+  <details><summary>Does it read our page content?</summary><p>It never requests the page body. It works with page versions and restrictions. Writing restrictions requires Confluence's classic content scopes, which are broad enough to read and change content. The app uses them only for restrictions.</p></details>
+  <details><summary>Will this make us 21 CFR Part 11 compliant or ISO 13485 certified?</summary><p>No. No software can deliver either. A signature in Attest means a listed approver clicked Approve at a recorded role, UTC time and page version. There's no re-authentication step. Validating your process remains your responsibility.</p></details>
+  <details><summary>What permissions does it ask for?</summary><p>storage:app, read:page:confluence, read:space:confluence, read:content.restriction:confluence, write:content.restriction:confluence, read:confluence-content.all, write:confluence-content, read:confluence-content.summary, write:comment:confluence and read:confluence-user.</p></details>
+  <details><summary>What doesn't it do?</summary><p>It doesn't snapshot page content: the record shows when and by whom a version was approved, and Confluence's page history holds what it said. Notices are page comments. Approvers aren't notified when something is submitted. Audit entries aren't cryptographically sealed. The daily check handles 100 documents per run, and audit export returns up to 5,000 rows. It hasn't yet been through a real audit.</p></details>
   <details><summary>What does it cost?</summary><p>Pricing will be published with the Marketplace listing. Email if you'd like to talk before then.</p></details>
  </div>
 </div></section>
 <section><div class="wrap">
- <div class="maker rv"><img src="logo.png" alt="" width="88" height="88"><div><h2>Talk to the person who built it.</h2><p>Attest is new, and it's built and supported by one person, Tommy Newman. No sales team and no customer logos yet. If you run controlled documents in Confluence, tell me what your auditor asks for, and it will shape what gets built next.</p><div class="cta"><a class="btn gold" href="mailto:tommy_newman@icloud.com?subject=Attest%20early%20access">Email Tommy</a></div></div></div>
+ <div class="maker rv"><img src="logo.png" alt="" width="88" height="88"><div><h2>Talk to the person who built it.</h2><p>Attest is new, and one person, Tommy Newman, builds and supports it. It has no customers yet. If you run controlled documents in Confluence, tell me what your auditor asks for, and it will shape what gets built next.</p><div class="cta"><a class="btn gold" href="mailto:tommy_newman@icloud.com?subject=Attest%20early%20access">Email Tommy</a></div></div></div>
 </div></section></main>
-<footer><div class="wrap">Attest: document control for Confluence Cloud. Built on Atlassian Forge, and not affiliated with or endorsed by Atlassian. Contact <a href="mailto:tommy_newman@icloud.com">tommy_newman@icloud.com</a>.</div></footer>
-<script src="site.js?v=3"></script></body></html>
+<footer><div class="wrap">Attest: controlled-document approvals for Confluence Cloud. Built on Atlassian Forge, and not affiliated with or endorsed by Atlassian. Contact <a href="mailto:tommy_newman@icloud.com">tommy_newman@icloud.com</a>.</div></footer>
+<script src="site.js?v=5"></script></body></html>
