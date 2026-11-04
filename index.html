@@ -1,11 +1,57 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Guide — Attest</title><link rel="stylesheet" href="style.css"><link rel="icon" href="logo.png"></head><body><header><div class="wrap"><img src="logo.png" alt=""><a href="./">Attest</a><nav><a href="./">Guide</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav></div></header>
-<main><div class="wrap"><h1>Attest</h1><p class="lead">Approvals that lock, signatures inside the page, an audit trail you can export. Controlled documents for Confluence Cloud.</p>
-<div class="grid"><div class="card"><strong>The approval actually holds.</strong><br>Edit an approved page and its status resets to Draft automatically — from a product trigger, not when someone remembers to open a panel.</div><div class="card"><strong>Signatures live in the document.</strong><br>The Approval signatures macro renders approver, role, UTC timestamp and version in the page body, so it exports to PDF with the content.</div><div class="card"><strong>Configure once per space.</strong><br>Approvers, quorum, review period and locking are set in Space settings and apply to every page in the space.</div></div>
-<h2>Getting started</h2><ol><li>Install Attest from the Atlassian Marketplace.</li><li>Open <strong>Space settings → Integrations → Document control</strong>. Add at least one approver, give each a role (it prints on the signature block), choose how many must sign, set a review period in months, and decide whether approved pages lock. Save.</li><li>On any page, open <strong>Document control</strong> under the title. <strong>Submit for review</strong>, then an approver clicks <strong>Approve</strong>.</li><li>Insert the <strong>Approval signatures</strong> macro wherever the signature record should appear in the document.</li></ol>
-<h2>What happens on approval</h2><ul><li>The page is marked <strong>Approved</strong> at its current version, with a review date if a period is set.</li><li>If locking is on, only the approvers, the document owner and the app can edit the page while it is approved. Everyone else in the space loses edit access until the approval is reset, when the previous restrictions are restored.</li><li>Every change is written to an append-only audit trail — there is no update and no delete.</li></ul>
-<h2>What happens when an approved page is edited</h2><p>Publishing a new version resets the document to Draft, clears the signatures (a signature belongs to the version it was given against), restores the previous edit restrictions exactly, and posts a comment on the page mentioning the owner — which is how Confluence sends the email.</p>
-<h2>Review dates</h2><p>A daily check expires approved documents past their review date and posts a comment on the page. A review period of 0 means a document never expires.</p>
-<h2>Permissions the app needs</h2><table><tr><th>Scope</th><th>Why</th></tr><tr><td>storage:app</td><td>Document records and the audit trail</td></tr><tr><td>read:page:confluence, read:confluence-content.summary</td><td>Read page versions; receive the page-updated event</td></tr><tr><td>read:space:confluence</td><td>Confirm the caller is a space admin before settings are changed</td></tr><tr><td>read/write:content.restriction:confluence, read:confluence-content.all, write:confluence-content</td><td>Record and set edit restrictions on approval</td></tr><tr><td>write:comment:confluence</td><td>Post the reset and review-due notices</td></tr><tr><td>read:confluence-user</td><td>Read the app&#39;s own account id so it can include itself in restrictions it writes</td></tr></table>
-<div class="note"><strong>If a lock cannot be applied,</strong> Attest says so in the panel and records it in the audit trail rather than failing silently.</div>
-<h2>What Attest is not</h2><p>Attest does not make a process &quot;21 CFR Part 11 compliant&quot; or &quot;ISO 13485 certified&quot;, and no software can. It gives you approval records with the detail an auditor expects. Validating your process remains your responsibility.</p></div></main><footer><div class="wrap">Attest — controlled documents for Confluence Cloud. Runs on Atlassian: no data leaves Atlassian infrastructure. Attest is not affiliated with Atlassian. Support: <a href="mailto:tommy_newman@icloud.com">tommy_newman@icloud.com</a>.</div></footer>
-</body></html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Attest · Approval that holds</title><meta name="description" content="Document control for Confluence Cloud. Approvals that lock, signatures inside the page, and an audit trail you can export."><meta name="theme-color" content="#04060d"><link rel="icon" href="logo.png"><link rel="stylesheet" href="style.css"></head>
+<body><canvas id="field" aria-hidden="true"></canvas>
+<header class="nav"><div class="wrap"><a class="brand" href="./"><img src="logo.png" alt="" width="32" height="32"><span>Attest</span></a><nav class="links" aria-label="Site"><a href="./" aria-current=page>Product</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav></div></header>
+<main><div class="wrap">
+<div class="hero">
+ <div>
+  <div class="eyebrow rv"><i></i>Document control for Confluence Cloud</div>
+  <h1 class="big rv" style="--d:.06s">Approval that holds.</h1>
+  <p class="lead rv" style="--d:.12s">Approve a page and it locks. Edit it and the approval resets by itself. The signature lives inside the document, and every change goes on a record nothing in the app can rewrite.</p>
+  <div class="cta rv" style="--d:.18s"><a class="btn gold" href="#film">Watch the film</a><a class="btn" href="#start">How it works</a></div>
+  <p class="note-small rv" style="--d:.24s">Marketplace listing in preparation.</p>
+ </div>
+ <div class="stage rv" style="--d:.1s">
+  <div class="doc" id="doc" data-state="draft" data-edited="false" aria-label="Illustration of a document moving through approval">
+   <div class="doc-top"><span class="ver">Version 3</span><span class="chip">Draft</span></div>
+   <div class="sheet"><h3>Quality Manual</h3><div class="line"></div><div class="line m"></div><div class="line new"></div><div class="line s"></div><div class="sig"></div><img class="seal" src="media/seal.png" alt="" width="92" height="92"></div>
+   <div class="lock"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg><span aria-live="polite"></span></div>
+   <div class="trail" aria-hidden="true"></div>
+   <div class="steps" role="group" aria-label="Choose a step"><button type="button">Draft</button><button type="button">Review</button><button type="button">Approve</button><button type="button">Edit</button></div>
+  </div>
+  <p class="note-small">An illustration of the app's behaviour, not a screenshot.</p>
+ </div>
+</div>
+</div>
+<section><div class="wrap">
+ <h2 class="rv">Built around one promise.</h2>
+ <p class="sub rv" style="--d:.05s">An approved document should mean what it says, including after someone touches it.</p>
+ <div class="grid">
+  <article class="card rv"><span class="n">01 / HOLD</span><h3>The approval actually holds</h3><p>Publishing a new version resets the document to Draft automatically. The reset runs from a product trigger, so nobody has to remember to open a panel.</p></article>
+  <article class="card rv" style="--d:.08s"><span class="n">02 / SIGN</span><h3>Signatures live in the document</h3><p>The Approval signatures macro renders approver, role, UTC timestamp and version in the page body, so the record stays with the content.</p></article>
+  <article class="card rv" style="--d:.16s"><span class="n">03 / RECORD</span><h3>Every change, on the record</h3><p>An append-only audit trail per page and per space, with CSV export. The app offers no way to edit or delete an entry.</p></article>
+ </div>
+</div></section>
+<section id="film"><div class="wrap">
+ <h2 class="rv">See it in thirty seconds.</h2>
+ <div class="film rv"><video src="media/promo.mp4" poster="media/promo-poster.jpg" controls playsinline preload="none" aria-label="Attest product film, no audio"></video></div>
+</div></section>
+<section id="start"><div class="wrap">
+ <h2 class="rv">Configured once, per space.</h2>
+ <p class="sub rv" style="--d:.05s">Approvers, quorum, review period and locking are set in one place and apply to every page in the space, including pages created later.</p>
+ <ol class="flow">
+  <li class="rv"><strong>Set it up.</strong> Open Space settings, Integrations, Document control. Add approvers with their roles, choose how many must sign, set a review period.</li>
+  <li class="rv"><strong>Submit and approve.</strong> On any page, open Document control under the title and submit it for review. An approver signs.</li>
+  <li class="rv"><strong>Place the signature.</strong> Insert the Approval signatures macro wherever the record belongs in the document.</li>
+  <li class="rv"><strong>Let it run.</strong> Edits reset the approval and tell the owner. A daily check expires documents past their review date.</li>
+ </ol>
+ <div class="honest rv"><h3>What locking does</h3><p>While a page is approved, only its approvers, its owner and the app can edit it, so everyone else in the space loses edit access until the approval is reset. The page's previous restrictions are then restored. If a lock cannot be applied, Attest says so in the panel and records it in the audit trail.</p></div>
+</div></section>
+<section><div class="wrap">
+ <h2 class="rv">Nothing leaves Atlassian.</h2>
+ <p class="sub rv" style="--d:.05s">Attest runs on Atlassian Forge with no servers of its own and no outside network calls. These are the permissions it asks for, and why.</p>
+ <div class="tablewrap rv"><table><tr><th>Scope</th><th>Why</th></tr><tr><td>storage:app</td><td>Document records and the audit trail</td></tr><tr><td>read:page:confluence, read:confluence-content.summary</td><td>Read page versions and receive the page-updated event</td></tr><tr><td>read:space:confluence</td><td>Confirm the caller administers the space before settings change</td></tr><tr><td>read/write:content.restriction:confluence, read:confluence-content.all, write:confluence-content</td><td>Record and set edit restrictions on approval</td></tr><tr><td>write:comment:confluence</td><td>Post the reset and review-due notices</td></tr><tr><td>read:confluence-user</td><td>Read the app's own account id so it can include itself in restrictions it writes</td></tr></table></div>
+ <div class="honest rv"><h3>What Attest is not</h3><p>Attest does not make a process "21 CFR Part 11 compliant" or "ISO 13485 certified", and no software can. It gives you approval records with the detail an auditor expects. Validating your process remains your responsibility.</p></div>
+</div></section></main>
+<footer><div class="wrap">Attest: document control for Confluence Cloud. Built on Atlassian Forge, and not affiliated with or endorsed by Atlassian. Contact <a href="mailto:tommy_newman@icloud.com">tommy_newman@icloud.com</a>.</div></footer>
+<script src="site.js"></script></body></html>
