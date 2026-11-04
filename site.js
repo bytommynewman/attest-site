@@ -45,35 +45,51 @@
     });
   }
 
-  /* The demo: the product's real state machine, illustrated */
+  /* The demo: the product's real state machine, driven by the visitor */
   var doc = document.getElementById('doc');
+  var extras = function () {
+    var bar = document.getElementById('bar');
+    if (bar && !still) {
+      var q = false;
+      var paint = function () { q = false; var m = document.documentElement.scrollHeight - window.innerHeight; bar.style.transform = 'scaleX(' + (m > 0 ? window.scrollY / m : 0).toFixed(4) + ')'; };
+      window.addEventListener('scroll', function () { if (!q) { q = true; requestAnimationFrame(paint); } }, { passive: true });
+    }
+    var tabs = document.querySelectorAll('.tabs button'), shots = document.querySelectorAll('.shots img'), cap = document.querySelector('.caption');
+    tabs.forEach(function (t, i) { t.addEventListener('click', function () {
+      tabs.forEach(function (o, n) { o.setAttribute('aria-selected', n === i); shots[n].classList.toggle('on', n === i); });
+      cap.textContent = t.getAttribute('data-cap');
+    }); });
+    document.querySelectorAll('.card').forEach(function (c) {
+      c.addEventListener('pointermove', function (e) { var r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px'); }, { passive: true });
+    });
+  };
+  extras();
   if (!doc) return;
-  var chip = doc.querySelector('.chip'), ver = doc.querySelector('.ver'), lock = doc.querySelector('.lock span'), trail = doc.querySelector('.trail'), sig = doc.querySelector('.sig'), btns = doc.querySelectorAll('.steps button');
+  var chip = doc.querySelector('.chip'), ver = doc.querySelector('.ver'), lock = doc.querySelector('.lock span'), trail = doc.querySelector('.trail'), sig = doc.querySelector('.sig'), next = doc.querySelector('.next'), verdict = doc.querySelector('.verdict');
   var stamp = function () { return new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC'; };
   var STEPS = [
-    { state: 'draft', edited: false, v: 3, chip: 'Draft', lock: 'Anyone in the space can edit', log: 'New → Draft' },
-    { state: 'review', edited: false, v: 3, chip: 'In review', lock: 'Waiting for approvers', log: 'Draft → In review' },
-    { state: 'approved', edited: false, v: 3, chip: 'Approved', lock: 'Locked to approvers and owner', log: 'In review → Approved · quorum met' },
-    { state: 'draft', edited: true, v: 4, chip: 'Draft', lock: 'Lock released, signatures cleared', log: 'Approved → Draft · republished as v4' }
+    { state: 'draft', edited: false, v: 3, chip: 'Draft', lock: 'Anyone in the space can edit', log: 'New → Draft', say: 'A controlled document, not yet approved.', btn: 'Submit for review' },
+    { state: 'review', edited: false, v: 3, chip: 'In review', lock: 'Waiting for approvers', log: 'Draft → In review', say: 'Approvers come from your space settings.', btn: 'Approve it' },
+    { state: 'approved', edited: false, v: 3, chip: 'Approved', lock: 'Locked to approvers and owner', log: 'In review → Approved · quorum met', say: 'Signed and locked. Now see what happens if someone changes it.', btn: 'Publish an edit to this page', hot: true },
+    { state: 'draft', edited: true, v: 4, chip: 'Draft', lock: 'Lock released, signatures cleared', log: 'Approved → Draft · republished as v4', say: 'Caught. The approval reset itself, nobody had to remember, and the owner was told.', btn: 'Start again' }
   ];
-  var at = -1, timer = 0, visible = true, lastLog = '';
+  var at = 0, timer = 0, visible = true, touched = false;
   var show = function (i) {
     at = i; var s = STEPS[i];
     doc.setAttribute('data-state', s.state); doc.setAttribute('data-edited', s.edited);
-    chip.textContent = s.chip; ver.textContent = 'Version ' + s.v; lock.textContent = s.lock;
+    chip.textContent = s.chip; ver.textContent = 'Version ' + s.v; lock.textContent = s.lock; verdict.textContent = s.say; next.textContent = s.btn;
+    if (s.hot) next.setAttribute('data-tone', 'hot'); else next.removeAttribute('data-tone');
     if (s.state === 'approved') sig.textContent = 'Signed by Quality Manager · ' + stamp() + ' · v' + s.v;
-    var same = lastLog === s.log; lastLog = s.log;
-    if (same) { btns.forEach(function (b, n) { b.setAttribute('aria-pressed', n === i); }); return; }
+    if (i === 0) trail.textContent = '';
     var row = document.createElement('div'); row.innerHTML = '<b>' + stamp().slice(11, 16) + '</b> ' + s.log; trail.insertBefore(row, trail.firstChild);
-    while (trail.children.length > 3) trail.removeChild(trail.lastChild);
-    btns.forEach(function (b, n) { b.setAttribute('aria-pressed', n === i); });
+    while (trail.children.length > 2) trail.removeChild(trail.lastChild);
   };
-  var DWELL = [2200, 2200, 4200, 4000];
-  var tick = function () { clearTimeout(timer); if (still || !visible || document.hidden) return; timer = setTimeout(function () { show((at + 1) % STEPS.length); tick(); }, DWELL[at]); };
-  btns.forEach(function (b, n) { b.addEventListener('click', function () { show(n); tick(); }); });
+  var DWELL = [2600, 2600, 4200, 4600];
+  var tick = function () { clearTimeout(timer); if (still || touched || !visible || document.hidden) return; timer = setTimeout(function () { show((at + 1) % STEPS.length); tick(); }, DWELL[at]); };
+  next.addEventListener('click', function () { touched = true; clearTimeout(timer); show((at + 1) % STEPS.length); });
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; tick(); }).observe(doc);
   document.addEventListener('visibilitychange', tick);
-  show(still ? 2 : 0); tick();
+  show(0); tick();
 
   /* Tilt follows the pointer, mouse only */
   var stage = doc.parentNode;
