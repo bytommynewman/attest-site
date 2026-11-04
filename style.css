@@ -1,0 +1,26 @@
+:root{--ink:#172b4d;--muted:#5e6c84;--brand:#0c2d6b;--accent:#e8a33d;--bg:#ffffff;--card:#f4f6fa;--line:#dfe1e6}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:var(--brand);color:#fff;padding:20px 16px}header .wrap{display:flex;align-items:center;gap:12px}header img{width:36px;height:36px;border-radius:8px}
+header a{color:#fff;text-decoration:none;font-weight:600}nav a{color:#c9d3e6;margin-left:18px;font-weight:500;text-decoration:none}nav a:hover{color:#fff}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}main{padding:40px 0 64px}h1{font-size:34px;line-height:1.2;margin:0 0 8px}h2{margin-top:40px;font-size:22px}
+.lead{font-size:19px;color:var(--muted);margin:0 0 28px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px}pre{background:#0c2d6b;color:#f4f6fa;padding:14px 16px;border-radius:8px;overflow:auto}
+table{border-collapse:collapse;width:100%}td,th{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}footer{border-top:1px solid var(--line);color:var(--muted);padding:24px 16px;font-size:14px}
+.note{border-left:4px solid var(--accent);padding:10px 14px;background:#fff8ec;border-radius:0 8px 8px 0}
+
+/* Motion: deliberate, short, and off entirely for people who ask for it. */
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes drift{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(18px,-10px,0) scale(1.06)}100%{transform:translate3d(0,0,0) scale(1)}}
+header{position:relative;overflow:hidden}
+header::before,header::after{content:"";position:absolute;border-radius:50%;filter:blur(42px);opacity:.35;pointer-events:none;animation:drift 16s ease-in-out infinite}
+header::before{width:260px;height:260px;background:#e8a33d;right:-60px;top:-120px}
+header::after{width:220px;height:220px;background:#4c9aff;left:8%;bottom:-140px;animation-duration:21s;animation-direction:reverse}
+header .wrap{position:relative;z-index:1}
+main h1,main .lead,main .grid .card,main h2,main ol,main ul,main table,main .note,main p{animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
+main .grid .card:nth-child(2){animation-delay:.08s}main .grid .card:nth-child(3){animation-delay:.16s}
+main h2{animation-delay:.05s}
+.card{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(12,45,107,.10);border-color:#c9d3e6}
+nav a{position:relative}nav a::after{content:"";position:absolute;left:0;right:100%;bottom:-4px;height:2px;background:#e8a33d;transition:right .22s ease}nav a:hover::after{right:0}
+a{transition:color .15s ease}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
