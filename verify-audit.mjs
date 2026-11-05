@@ -60,17 +60,18 @@ for (const [id, list] of chains) {
     const seq = Number(get(r, 'seq'));
     const body = JSON.stringify([seq, get(r, 'prev_hash'), id, get(r, 'space'), get(r, 'timestamp_utc'), get(r, 'actor_id'), get(r, 'actor_name'), get(r, 'from_state'), get(r, 'to_state'), Number(get(r, 'version')), get(r, 'note')]);
     const want = createHash('sha256').update(body, 'utf8').digest('hex');
-    if (get(r, 'redacted') !== 'true' && want !== get(r, 'hash')) { problem = `entry ${seq} has been altered`; break; }
+    const red = get(r, 'redacted') === 'true';
+    if (red && get(r, 'actor_id') !== 'erased' && !get(r, 'note').includes('rased')) { problem = `entry ${seq} is marked redacted but shows no removal`; break; }
+    if (!red && want !== get(r, 'hash')) { problem = `entry ${seq} has been altered`; break; }
     if (!prev && !partial && (seq !== 1 || get(r, 'prev_hash'))) { problem = `entries before ${seq} are missing from these files`; break; }
     if (prev && seq === prev.seq && get(r, 'hash') === prev.hash) continue;
     if (prev && (seq !== prev.seq + 1 || get(r, 'prev_hash') !== prev.hash)) { problem = `entry ${seq} does not follow entry ${prev.seq}`; break; }
     prev = { seq, hash: get(r, 'hash') };
-    verified++;
-    if (get(r, 'redacted') === 'true') redacted++;
+    if (red) redacted++; else verified++;
   }
   if (problem) { failed++; console.log(`FAIL  ${id}: ${problem}`); }
   else { const n = prev.seq - Number(get(list[0], 'seq')) + 1; console.log(`OK    ${id}: ${n} ${n === 1 ? 'entry' : 'entries'}${partial ? ` from seq ${get(list[0], 'seq')}` : ''}, newest hash ${prev.hash}`); }
 }
-console.log(`\n${verified} ${verified === 1 ? 'entry' : 'entries'} verified across ${chains.size} ${chains.size === 1 ? 'chain' : 'chains'}.${unchained ? ` ${unchained} older ${unchained === 1 ? 'entry predates' : 'entries predate'} chaining and ${unchained === 1 ? 'was' : 'were'} not checked.` : ''}${redacted ? ` ${redacted} ${redacted === 1 ? 'entry has' : 'entries have'} a closed account removed: they link to the chain, but their own hash can't be recomputed.` : ''}`);
+console.log(`\n${verified} ${verified === 1 ? 'entry' : 'entries'} verified across ${chains.size} ${chains.size === 1 ? 'chain' : 'chains'}.${unchained ? ` ${unchained} older ${unchained === 1 ? 'entry predates' : 'entries predate'} chaining and ${unchained === 1 ? 'was' : 'were'} not checked.` : ''}${redacted ? ` ${redacted} ${redacted === 1 ? 'entry has' : 'entries have'} a closed account removed: they link to the chain, but their contents can't be verified. Ask why if you didn't expect any.` : ''}`);
 console.log("This can't see newest entries being removed. Keep the newest hash from each export and check it still appears in later ones.");
 process.exit(failed ? 1 : 0);
