@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://bytommynewman.github.io/attest-site/sitemap.xml
