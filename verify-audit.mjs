@@ -68,8 +68,8 @@ for (const [id, list] of chains) {
     verified++;
   }
   if (problem) { failed++; console.log(`FAIL  ${id}: ${problem}`); }
-  else console.log(`OK    ${id}: ${prev.seq - Number(get(list[0], 'seq')) + 1} entries${partial ? ` from seq ${get(list[0], 'seq')}` : ''}, newest hash ${prev.hash}`);
+  else { const n = prev.seq - Number(get(list[0], 'seq')) + 1; console.log(`OK    ${id}: ${n} ${n === 1 ? 'entry' : 'entries'}${partial ? ` from seq ${get(list[0], 'seq')}` : ''}, newest hash ${prev.hash}`); }
 }
-console.log(`\n${verified} entries verified across ${chains.size} chains.${unchained ? ` ${unchained} entries predate chaining and were not checked.` : ''}`);
+console.log(`\n${verified} ${verified === 1 ? 'entry' : 'entries'} verified across ${chains.size} ${chains.size === 1 ? 'chain' : 'chains'}.${unchained ? ` ${unchained} older ${unchained === 1 ? 'entry predates' : 'entries predate'} chaining and ${unchained === 1 ? 'was' : 'were'} not checked.` : ''}`);
 console.log("This can't see newest entries being removed. Keep the newest hash from each export and check it still appears in later ones.");
 process.exit(failed ? 1 : 0);
