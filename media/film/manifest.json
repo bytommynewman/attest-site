@@ -1,1 +1,1 @@
-{"approach": {"frames": 96}, "press": {"frames": 124, "contact": 0.5}, "newsheet": {"frames": 78}, "ledger": {"frames": 53}}
+{"approach": {"frames": 96, "hi": true}, "press": {"frames": 121, "contact": 0.38, "hi": true}, "newsheet": {"frames": 58}, "ledger": {"frames": 53}}
