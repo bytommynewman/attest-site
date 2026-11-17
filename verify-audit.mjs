@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Verifies an Attest audit export without using the app.
+// Verifies an Counterseal audit export without using the app.
 // Usage: node verify-audit.mjs [--partial] batch-1.csv [batch-2.csv ...]
 // Give it every batch of an export together, so each page's chain is complete.
 // Exits 0 if every chain verifies from its first entry, 1 if any entry fails or is missing.
@@ -41,7 +41,7 @@ for (const file of files) {
 }
 const at = Object.fromEntries(head.map((h, i) => [h, i]));
 for (const need of ['seq', 'prev_hash', 'hash', 'page_id']) {
-  if (!(need in at)) { console.error(`Not an Attest export: missing column ${need}`); process.exit(2); }
+  if (!(need in at)) { console.error(`Not an Counterseal export: missing column ${need}`); process.exit(2); }
 }
 const get = (r, k) => undo(r[at[k]] ?? '');
 const chains = new Map();
